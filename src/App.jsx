@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ImageUpload from "./components/ImageUpload";
 import ResultPage from "./components/ResultPage";
+import FacePage from "./components/FacePage";
 import "./App.css";
 import "./styles/styles.css";
 
@@ -24,6 +25,7 @@ function App() {
           }
         />
         <Route path="/result" element={<ResultPage />} />
+        <Route path="/face/:id" element={<FacePage />} />
       </Routes>
     </Router>
   );

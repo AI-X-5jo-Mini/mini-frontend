@@ -101,17 +101,39 @@ function ResultPage() {
   const compatibilityResult = getCompatibilityResult();
   const compatibilityDescription = getCompatibilityDescription();
 
+  // 이미지 클릭 핸들러 추가
+  const handleImageClick = (image, name, id) => {
+    navigate(`/face/${id}`, {
+      state: {
+        image,
+        name,
+        faceId: id,
+        resultState: location.state, // 결과 페이지 상태를 저장하여 돌아올 때 사용
+      },
+    });
+  };
+
   return (
     <div className="container">
       <h1>결과 페이지</h1>
       <div className="image-frame">
         <div className="image-container">
           <div>
-            <img src={image1} alt={name1} />
+            <img
+              src={image1}
+              alt={name1}
+              onClick={() => handleImageClick(image1, name1, 1)}
+              style={{ cursor: "pointer" }}
+            />
             <p>{name1}</p>
           </div>
           <div>
-            <img src={image2} alt={name2} />
+            <img
+              src={image2}
+              alt={name2}
+              onClick={() => handleImageClick(image2, name2, 2)}
+              style={{ cursor: "pointer" }}
+            />
             <p>{name2}</p>
           </div>
         </div>
