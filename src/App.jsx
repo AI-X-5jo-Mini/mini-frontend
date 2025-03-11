@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ImageUpload from "./components/ImageUpload";
+import ResultPage from "./components/ResultPage";
+import "./App.css";
+import "./styles/styles.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="container">
+              <h1>관상-궁합 서비스 목업</h1>
+              <div className="message-frame">
+                세계의 유명한 셀럽들과 당신의 친구! 가족! 사랑하는 사람들과의
+                궁합을 알아봅시다! 지금 사진 한 장으로 시작해보세요 🤣
+              </div>
+              <ImageUpload />
+            </div>
+          }
+        />
+        <Route path="/result" element={<ResultPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
