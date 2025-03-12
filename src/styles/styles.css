@@ -104,3 +104,77 @@ input[type="file"] {
   max-width: 400px;
   margin: 0 auto;
 }
+
+/* 공유 버튼 스타일 - 기존 share-frame 대체 */
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.share-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.share-button.twitter {
+  background-color: #1da1f2;
+}
+
+.share-button.twitter:hover {
+  background-color: #0d8ed9;
+}
+
+.share-button.instagram {
+  background: linear-gradient(
+    45deg,
+    #f09433 0%,
+    #e6683c 25%,
+    #dc2743 50%,
+    #cc2366 75%,
+    #bc1888 100%
+  );
+}
+
+.share-button.instagram:hover {
+  background: linear-gradient(
+    45deg,
+    #e78b2b 0%,
+    #d85c33 25%,
+    #c9233b 50%,
+    #b61f5a 75%,
+    #a9157a 100%
+  );
+}
+
+.share-button i {
+  font-size: 18px;
+}
+
+/* 반응형 디자인 - 기존 미디어 쿼리와 일관성 유지 */
+@media (max-width: 768px) {
+  .share-button span {
+    display: none;
+  }
+
+  .share-button {
+    padding: 12px;
+    border-radius: 50%;
+  }
+}
