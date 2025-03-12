@@ -102,7 +102,9 @@ function ResultPage() {
         </div>
       </div>
 
-      <button onClick={() => navigate("/")}>다시하기</button>
+      <button className="restart-button" onClick={() => navigate("/")}>
+        다시하기
+      </button>
     </div>
   );
 }
