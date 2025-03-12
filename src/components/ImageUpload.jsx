@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/imageUpload.css";
+import { analyzeApi } from "../api/analyzeApi";
 
 function ImageUpload() {
   const [preview1, setPreview1] = useState("");
@@ -24,28 +25,7 @@ function ImageUpload() {
     }
   };
 
-  const uploadImages = async (file1, file2) => {
-    const formData = new FormData();
-    formData.append("image1", file1);
-    if (file2) {
-        formData.append("image2", file2); // 두 번째 파일이 있을 경우 추가
-    }
-
-    try {
-        const response = await fetch("http://127.0.0.1:8000/analyze/", {
-            method: "POST",
-            body: formData, // FormData를 직접 전송
-        });
-
-        const result = await response.json();
-        console.log("서버 응답:", result);
-    } catch (error) {
-        console.error("파일 업로드 중 오류 발생:", error);
-    }
-};
-
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // 두 이미지가 모두 업로드되었는지 확인
@@ -54,20 +34,25 @@ function ImageUpload() {
       return;
     }
 
-    uploadImages(image1, image2);
+    try {
+      const result = await analyzeApi(image1, image2);
+      console.log("서버 응답:", result);
 
-    // 결과 페이지로 이동하면서 이미지와 이름 데이터를 전달
-    navigate("/result", {
-      state: {
-        image1: preview1,
-        image2: preview2,
-        name1: name1,
-        name2: name2,
-      },
-    });
+      // 결과 페이지로 이동하면서 이미지와 이름 데이터를 전달
+      navigate("/result", {
+        state: {
+          image1: preview1,
+          image2: preview2,
+          name1: name1,
+          name2: name2,
+          analysisResult: result, // 분석 결과도 함께 전달
+        },
+      });
+    } catch (error) {
+      console.error("파일 업로드 중 오류 발생:", error);
+      alert("이미지 분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
   };
-
-  
 
   return (
     <div className="upload-container">
