@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/imageUpload.css";
 import { analyzeApi } from "../api/analyzeApi";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function ImageUpload() {
   const [preview1, setPreview1] = useState("");
@@ -11,6 +12,7 @@ function ImageUpload() {
   const [image2, setImage2] = useState("");
   const [name1, setName1] = useState("나");
   const [name2, setName2] = useState("타인");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleImageChange = (e, setPreview, setImage) => {
@@ -35,6 +37,7 @@ function ImageUpload() {
     }
 
     try {
+      setLoading(true);
       const result = await analyzeApi(image1, image2);
       console.log("서버 응답:", result);
 
@@ -51,6 +54,8 @@ function ImageUpload() {
     } catch (error) {
       console.error("파일 업로드 중 오류 발생:", error);
       alert("이미지 분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,13 +124,27 @@ function ImageUpload() {
           </div>
         </div>
 
-        <button type="submit" className="submit-button">
-          궁합보기!
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? (
+            <div className="loading-container">
+              <CircularProgress size={24} color="inherit" />
+              <span style={{ marginLeft: "10px" }}>분석 중...</span>
+            </div>
+          ) : (
+            "궁합보기!"
+          )}
         </button>
         <p className="notice-text">
           *걱정마세요! 사진은 절대로 저장되지 않습니다.
         </p>
       </form>
+
+      {loading && (
+        <div className="loading-overlay">
+          <CircularProgress size={60} />
+          <p>이미지 분석 중입니다...</p>
+        </div>
+      )}
     </div>
   );
 }
