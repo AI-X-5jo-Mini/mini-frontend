@@ -125,14 +125,7 @@ function ImageUpload() {
         </div>
 
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? (
-            <div className="loading-container">
-              <CircularProgress size={24} color="inherit" />
-              <span style={{ marginLeft: "10px" }}>분석 중...</span>
-            </div>
-          ) : (
-            "궁합보기!"
-          )}
+          {loading ? "분석 중..." : "궁합보기!"}
         </button>
         <p className="notice-text">
           *걱정마세요! 사진은 절대로 저장되지 않습니다.
