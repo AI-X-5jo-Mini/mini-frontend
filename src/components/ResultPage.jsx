@@ -149,13 +149,28 @@ function ResultPage() {
         <button className="retry-button" onClick={() => navigate("/")}>
           다시하기
         </button>
-        <div className="share-frame">
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            Twitter 공유
-          </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            Instagram 공유
-          </a>
+        <div className="share-buttons">
+          <button
+            className="share-button twitter"
+            onClick={() =>
+              window.open(
+                "https://twitter.com/intent/tweet?text=내 궁합 결과를 확인해보세요!",
+                "_blank"
+              )
+            }
+            aria-label="Twitter 공유"
+          >
+            {/* <i className="fa fa-twitter"></i> */}
+            <span>트위터</span>
+          </button>
+          <button
+            className="share-button instagram"
+            onClick={() => window.open("https://www.instagram.com/", "_blank")}
+            aria-label="Instagram 공유"
+          >
+            {/* <i className="fa fa-instagram"></i> */}
+            <span>인스타그램</span>
+          </button>
         </div>
       </div>
     </div>
