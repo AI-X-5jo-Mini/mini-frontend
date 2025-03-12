@@ -37,7 +37,7 @@ body {
 }
 .image-container img,
 .upload-box img {
-  width: 200px;
+  width: 220px;
   height: 200px;
   border-radius: 10px;
   object-fit: cover;
