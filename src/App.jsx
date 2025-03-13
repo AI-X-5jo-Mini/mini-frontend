@@ -1,6 +1,7 @@
 // src/App.jsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Layout from "./layout/layout";
 import ImageUpload from "./components/ImageUpload";
 import ResultPage from "./components/ResultPage";
 import FacePage from "./components/FacePage";
@@ -9,33 +10,16 @@ import "./styles/styles.css";
 
 function App() {
   return (
-    <Router>
-      <Routes>
+    <Routes>
+      <Route path="/" element={<Layout />}>
         <Route
-          path="/"
-          element={
-            <div className="container">
-              <img
-                src="/FACTE.png"
-                alt="logo"
-                className="logo"
-                width={270}
-                height={200}
-              />
-              <br />
-              <br />
-              <div className="message-frame">
-                당신의 친구! 가족! 사랑하는 사람들과의 궁합을 알아봅시다! 지금
-                사진 두 장으로 시작해보세요 🤣
-              </div>
-              <ImageUpload />
-            </div>
-          }
+          index
+          element={<ImageUpload />}
         />
-        <Route path="/result" element={<ResultPage />} />
-        <Route path="/face/:id" element={<FacePage />} />
-      </Routes>
-    </Router>
+        <Route path="result" element={<ResultPage />} />
+        <Route path="face/:id" element={<FacePage />} />
+      </Route>
+    </Routes>
   );
 }
 
