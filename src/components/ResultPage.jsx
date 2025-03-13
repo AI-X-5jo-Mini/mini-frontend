@@ -89,6 +89,7 @@ function ResultPage() {
     ?.compatibility_analysis
     ? analysisResult.compatibility_result.compatibility_analysis
         .replace(/두 사람의 궁합 분석 내용:[ \t\n]*/i, "")
+        .replace(/두 사람의 궁합 분석:[ \t\n]*/i, "")
         .trim()
     : "";
 
@@ -114,10 +115,34 @@ function ResultPage() {
           <div className="simple-result">
             <h2>
               {compatibilityAnalysis.includes("총점")
-                ? compatibilityAnalysis
-                    .split("총점으로는")[1]
-                    .split("점")[0]
-                    .trim() + "점"
+                ? (() => {
+                    const score = parseInt(
+                      compatibilityAnalysis
+                        .split("총점은")[1]
+                        .split("점")[0]
+                        .trim()
+                    );
+
+                    let evaluation;
+                    switch (true) {
+                      case score >= 90:
+                        evaluation = "매우 좋음";
+                        break;
+                      case score >= 80:
+                        evaluation = "좋음";
+                        break;
+                      case score >= 70:
+                        evaluation = "중간";
+                        break;
+                      case score >= 60:
+                        evaluation = "나쁨";
+                        break;
+                      default:
+                        evaluation = "아주 나쁨";
+                    }
+
+                    return score + "점 (" + evaluation + ")";
+                  })()
                 : "매우 좋음"}
             </h2>
           </div>
