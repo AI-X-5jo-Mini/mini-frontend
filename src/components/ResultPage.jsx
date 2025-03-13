@@ -75,11 +75,13 @@ function ResultPage() {
   // API 응답에서 궁합 결과 가져오기
   const person1Analysis = analysisResult?.compatibility_result?.person1_analysis
     ? analysisResult.compatibility_result.person1_analysis
+        .replace(/첫 번째 사람의 관상:[ \t\n]*/i, "")
         .replace(/첫 번째 사람 분석 내용:[ \t\n]*/i, "")
         .trim()
     : "";
   const person2Analysis = analysisResult?.compatibility_result?.person2_analysis
     ? analysisResult.compatibility_result.person2_analysis
+        .replace(/두 번째 사람의 관상:[ \t\n]*/i, "")
         .replace(/두 번째 사람 분석 내용:[ \t\n]*/i, "")
         .trim()
     : "";
