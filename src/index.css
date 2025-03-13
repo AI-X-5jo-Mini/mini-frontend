@@ -14,11 +14,22 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px; /* 기본 폰트 크기 설정 */
+  background-color: #f9f9f9; /* 배경색 추가 */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* 화면 크기에 따른 반응형 설정 */
+@media (min-width: 1600px) {
+  .app-container,
+  .container,
+  .simple-result-container {
+    max-width: 1600px; /* 더 큰 화면에서는 더 넓게 */
+  }
 }
 
 /* 추가 스타일은 styles.css에서 관리합니다 */

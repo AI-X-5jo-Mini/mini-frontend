@@ -15,10 +15,11 @@ function App() {
           path="/"
           element={
             <div className="container">
-              <h1>관상-궁합 서비스 목업</h1>
+              <h1>관상-궁합 서비스</h1>
+              <br />
               <div className="message-frame">
-                세계의 유명한 셀럽들과 당신의 친구! 가족! 사랑하는 사람들과의
-                궁합을 알아봅시다! 지금 사진 한 장으로 시작해보세요 🤣
+                당신의 친구! 가족! 사랑하는 사람들과의 궁합을 알아봅시다! 지금
+                사진 두 장으로 시작해보세요 🤣
               </div>
               <ImageUpload />
             </div>
