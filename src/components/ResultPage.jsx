@@ -101,7 +101,7 @@ function ResultPage() {
   });
 
   return (
-    <div className="simple-result-container">
+    <div className="container simple-result-container">
       <h1>궁합 결과</h1>
 
       <div className="result-scroll-container">

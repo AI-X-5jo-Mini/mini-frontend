@@ -1,9 +1,23 @@
 /* src/App.css */
+.app-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
-  max-width: 1200px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px;
+  box-sizing: border-box;
 }
 
 /* 나머지 스타일은 styles.css에서 관리합니다 */

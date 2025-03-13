@@ -11,7 +11,7 @@ function ImageUpload() {
   const [image1, setImage1] = useState("");
   const [image2, setImage2] = useState("");
   const [name1, setName1] = useState("나");
-  const [name2, setName2] = useState("타인");
+  const [name2, setName2] = useState("짝꿍");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
