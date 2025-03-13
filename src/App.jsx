@@ -15,7 +15,14 @@ function App() {
           path="/"
           element={
             <div className="container">
-              <h1>관상-궁합 서비스</h1>
+              <img
+                src="/FACTE.png"
+                alt="logo"
+                className="logo"
+                width={270}
+                height={200}
+              />
+              <br />
               <br />
               <div className="message-frame">
                 당신의 친구! 가족! 사랑하는 사람들과의 궁합을 알아봅시다! 지금
