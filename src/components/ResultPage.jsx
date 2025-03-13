@@ -22,12 +22,39 @@ function ResultPage() {
       if (!canvas) return;
 
       const ctx = canvas.getContext("2d");
-      const data1 = Array.from({ length: 5 }, () =>
-        Math.floor(Math.random() * 5)
+
+      // 분석 결과에서 점수 추출
+      const extractScore = (scoreText) => {
+        console.log("scoreText:", scoreText);
+        if (!scoreText) return [0, 0];
+        const scores = scoreText.split(":")[1].trim().split(",");
+        return [
+          parseInt(scores[0].trim().replace("점", "")),
+          parseInt(scores[1].trim().replace("점", "")),
+        ];
+      };
+
+      const [외모1, 외모2] = extractScore(
+        analysisResult?.compatibility_result?.score1
       );
-      const data2 = Array.from({ length: 5 }, () =>
-        Math.floor(Math.random() * 5)
+      const [성격1, 성격2] = extractScore(
+        analysisResult?.compatibility_result?.score2
       );
+      const [취향1, 취향2] = extractScore(
+        analysisResult?.compatibility_result?.score3
+      );
+      const [가치관1, 가치관2] = extractScore(
+        analysisResult?.compatibility_result?.score4
+      );
+      const [미래1, 미래2] = extractScore(
+        analysisResult?.compatibility_result?.score5
+      );
+
+      const data1 = [외모1, 성격1, 취향1, 가치관1, 미래1];
+      const data2 = [외모2, 성격2, 취향2, 가치관2, 미래2];
+
+      console.log("data1:", data1);
+      console.log("data2:", data2);
 
       if (window.myChartInstance) {
         window.myChartInstance.destroy();
@@ -70,7 +97,7 @@ function ResultPage() {
         }
       };
     }
-  }, [image1, image2, name1, name2]);
+  }, [image1, image2, name1, name2, analysisResult]);
 
   // API 응답에서 궁합 결과 가져오기
   const person1Analysis = analysisResult?.compatibility_result?.person1_analysis
