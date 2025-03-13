@@ -73,12 +73,30 @@ function ResultPage() {
   }, [image1, image2, name1, name2]);
 
   // API 응답에서 궁합 결과 가져오기
-  const person1Analysis =
-    analysisResult?.compatibility_result?.person1_analysis || "";
-  const person2Analysis =
-    analysisResult?.compatibility_result?.person2_analysis || "";
-  const compatibilityAnalysis =
-    analysisResult?.compatibility_result?.compatibility_analysis || "";
+  const person1Analysis = analysisResult?.compatibility_result?.person1_analysis
+    ? analysisResult.compatibility_result.person1_analysis
+        .replace(/첫 번째 사람 분석 내용:[ \t\n]*/i, "")
+        .trim()
+    : "";
+  const person2Analysis = analysisResult?.compatibility_result?.person2_analysis
+    ? analysisResult.compatibility_result.person2_analysis
+        .replace(/두 번째 사람 분석 내용:[ \t\n]*/i, "")
+        .trim()
+    : "";
+  const compatibilityAnalysis = analysisResult?.compatibility_result
+    ?.compatibility_analysis
+    ? analysisResult.compatibility_result.compatibility_analysis
+        .replace(/두 사람의 궁합 분석 내용:[ \t\n]*/i, "")
+        .trim()
+    : "";
+
+  // 디버깅을 위한 콘솔 로그 추가
+  console.log("원본 데이터:", analysisResult?.compatibility_result);
+  console.log("처리된 데이터:", {
+    person1Analysis,
+    person2Analysis,
+    compatibilityAnalysis,
+  });
 
   return (
     <div className="simple-result-container">
