@@ -1,17 +1,18 @@
 // src/components/ImageUpload.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import "../styles/imageUpload.css";
 import { analyzeApi } from "../api/analyzeApi";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function ImageUpload() {
+  const { mode } = useOutletContext();
   const [preview1, setPreview1] = useState("");
   const [preview2, setPreview2] = useState("");
   const [image1, setImage1] = useState("");
   const [image2, setImage2] = useState("");
   const [name1, setName1] = useState("나");
-  const [name2, setName2] = useState("짝꿍");
+  const [name2, setName2] = useState(mode === "single" ? "AI" : "짝꿍");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -30,25 +31,54 @@ function ImageUpload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 두 이미지가 모두 업로드되었는지 확인
-    if (!image1 || !image2) {
-      alert("두 개의 이미지를 모두 업로드해주세요!");
-      return;
+    if (mode === "single") {
+      // 1인 모드에서는 이미지 1개만 확인
+      if (!image1) {
+        alert("이미지를 업로드해주세요!");
+        return;
+      }
+    } else {
+      // 2인 모드에서는 이미지 2개 모두 확인
+      if (!image1 || !image2) {
+        alert("두 개의 이미지를 모두 업로드해주세요!");
+        return;
+      }
     }
 
     try {
       setLoading(true);
-      const result = await analyzeApi(image1, image2);
+      
+      // FormData 생성
+      const formData = new FormData();
+      formData.append("image1", image1);
+      formData.append("name1", name1);
+      
+      if (mode === "double") {
+        formData.append("image2", image2);
+        formData.append("name2", name2);
+      }
+      
+      formData.append("mode", mode);
+
+      let result;
+      if (mode === "single") {
+        // 1인 모드일 때는 AI 이미지를 사용
+        result = await analyzeApi(formData);
+      } else {
+        // 2인 모드일 때는 두 이미지 모두 사용
+        result = await analyzeApi(formData);
+      }
       console.log("서버 응답:", result);
 
-      // 결과 페이지로 이동하면서 이미지와 이름 데이터를 전달
+      // 결과 페이지로 이동하면서 데이터 전달
       navigate("/result", {
         state: {
+          mode: mode,
           image1: preview1,
-          image2: preview2,
+          image2: mode === "single" ? null : preview2,
           name1: name1,
           name2: name2,
-          analysisResult: result, // 분석 결과도 함께 전달
+          analysisResult: result,
         },
       });
     } catch (error) {
@@ -61,6 +91,20 @@ function ImageUpload() {
 
   return (
     <div className="upload-container">
+      <img
+        src="/FACTE.png"
+        alt="logo"
+        className="logo"
+        width={270}
+        height={200}
+      />
+      <br />
+      <br />
+      <div className="message-frame">
+        {mode === "single" 
+          ? "AI와 나의 궁합을 알아봅시다! 당신의 사진 한 장으로 시작해보세요 🤖"
+          : "친구! 가족! 사랑하는 사람들과의 궁합을 알아봅시다! 사진 두 장으로 시작해보세요 🤣"}
+      </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="upload-area">
           <div className="upload-item">
@@ -93,35 +137,37 @@ function ImageUpload() {
             />
           </div>
 
-          <div className="upload-item">
-            <label className="upload-box">
-              {preview2 ? (
-                <img
-                  src={preview2}
-                  alt="미리보기 2"
-                  className="preview-image"
+          {mode === "double" && (
+            <div className="upload-item">
+              <label className="upload-box">
+                {preview2 ? (
+                  <img
+                    src={preview2}
+                    alt="미리보기 2"
+                    className="preview-image"
+                  />
+                ) : (
+                  <div className="upload-placeholder">
+                    <i className="upload-icon">📷</i>
+                    <p>상대방 사진을 넣어주세요</p>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => handleImageChange(e, setPreview2, setImage2)}
+                  className="file-input"
                 />
-              ) : (
-                <div className="upload-placeholder">
-                  <i className="upload-icon">📷</i>
-                  <p>상대방 사진을 넣어주세요</p>
-                </div>
-              )}
+              </label>
               <input
-                type="file"
-                onChange={(e) => handleImageChange(e, setPreview2, setImage2)}
-                className="file-input"
+                type="text"
+                className="name-input"
+                name="name2"
+                value={name2}
+                onChange={(e) => setName2(e.target.value)}
+                placeholder="이름 입력"
               />
-            </label>
-            <input
-              type="text"
-              className="name-input"
-              name="name2"
-              value={name2}
-              onChange={(e) => setName2(e.target.value)}
-              placeholder="이름 입력"
-            />
-          </div>
+            </div>
+          )}
         </div>
 
         <button type="submit" className="submit-button" disabled={loading}>
@@ -131,11 +177,9 @@ function ImageUpload() {
           *걱정마세요! 사진은 절대로 저장되지 않습니다.
         </p>
       </form>
-      <br />
       {loading && (
         <div className="loading-overlay">
           <CircularProgress size={60} />
-
           <p>이미지 분석 중입니다...</p>
         </div>
       )}
