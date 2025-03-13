@@ -131,10 +131,11 @@ function ImageUpload() {
           *걱정마세요! 사진은 절대로 저장되지 않습니다.
         </p>
       </form>
-
+      <br />
       {loading && (
         <div className="loading-overlay">
           <CircularProgress size={60} />
+
           <p>이미지 분석 중입니다...</p>
         </div>
       )}

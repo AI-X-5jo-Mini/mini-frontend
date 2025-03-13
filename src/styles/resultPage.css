@@ -254,3 +254,75 @@ button:hover {
 .restart-button:hover {
   background-color: #3a7ad5;
 }
+
+.analysis-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.analysis-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.analysis-card:hover {
+  transform: translateY(-5px);
+}
+
+.analysis-card h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 18px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.analysis-card p {
+  color: #555;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.analysis-card.compatibility {
+  background-color: #f8f9ff;
+  border-left: 4px solid #4b8bf4;
+}
+
+.restart-button {
+  width: 150px;
+  margin: 30px auto;
+  padding: 12px 0;
+  border-radius: 30px;
+  background-color: #4b8bf4;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(75, 139, 244, 0.3);
+  display: block;
+}
+
+.restart-button:hover {
+  background-color: #3a7ad5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(75, 139, 244, 0.4);
+}
+
+.simple-result-container h1 {
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.simple-result h2 {
+  font-size: 24px;
+  color: #4b8bf4;
+}

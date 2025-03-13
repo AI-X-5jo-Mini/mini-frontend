@@ -73,8 +73,12 @@ function ResultPage() {
   }, [image1, image2, name1, name2]);
 
   // API 응답에서 궁합 결과 가져오기
-  const compatibilityResult =
-    analysisResult?.compatibility_result || "매우 좋음";
+  const person1Analysis =
+    analysisResult?.compatibility_result?.person1_analysis || "";
+  const person2Analysis =
+    analysisResult?.compatibility_result?.person2_analysis || "";
+  const compatibilityAnalysis =
+    analysisResult?.compatibility_result?.compatibility_analysis || "";
 
   return (
     <div className="simple-result-container">
@@ -88,7 +92,14 @@ function ResultPage() {
           </div>
 
           <div className="simple-result">
-            <h2>{compatibilityResult}</h2>
+            <h2>
+              {compatibilityAnalysis.includes("총점")
+                ? compatibilityAnalysis
+                    .split("총점으로는")[1]
+                    .split("점")[0]
+                    .trim() + "점"
+                : "매우 좋음"}
+            </h2>
           </div>
 
           <div className="simple-person">
@@ -99,6 +110,23 @@ function ResultPage() {
 
         <div className="simple-chart">
           <canvas id="myChart"></canvas>
+        </div>
+
+        <div className="analysis-container">
+          <div className="analysis-card">
+            <h3>{name1} 분석</h3>
+            <p>{person1Analysis}</p>
+          </div>
+
+          <div className="analysis-card">
+            <h3>{name2} 분석</h3>
+            <p>{person2Analysis}</p>
+          </div>
+
+          <div className="analysis-card compatibility">
+            <h3>궁합 분석</h3>
+            <p>{compatibilityAnalysis}</p>
+          </div>
         </div>
       </div>
 
