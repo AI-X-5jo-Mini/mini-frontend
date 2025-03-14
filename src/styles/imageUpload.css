@@ -1,10 +1,24 @@
 .upload-container {
-  max-width: 1000px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 80px); /* 네비게이션 바 높이만큼 제외 */
+  width: 100%;
+  align-items: center;
   padding: 20px;
+  background-color: white;
+}
+
+.upload-container form {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .upload-area {
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -16,6 +30,7 @@
 .upload-item {
   flex: 1;
   min-width: 280px;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,6 +125,34 @@
   text-align: center;
   color: #868e96;
   font-size: 14px;
+}
+
+.message-frame {
+  border: 2px solid #ccc;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  background-color: white;
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.main-message {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 500;
+}
+
+.sub-message {
+  font-size: 1.1rem;
+  color: #8a2be2;
+  font-weight: 500;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
 }
 
 @media (max-width: 768px) {

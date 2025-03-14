@@ -1,45 +1,55 @@
+/* 레이아웃 컨테이너 스타일 */
 .layout-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
 }
 
+/* 네비게이션 바 스타일 */
 .navigation-bar {
-  background-color: #ffffff;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
+/* 토글 컨테이너 스타일 */
 .toggle-container {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  max-width: 400px;
-  margin: 0 auto;
+  gap: 10px;
 }
 
+/* 토글 버튼 스타일 */
 .toggle-button {
-  padding: 0.5rem 1.5rem;
-  border: 2px solid #e0e0e0;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background-color: rgba(138, 43, 226, 0.2);
+  color: #8a2be2;
   border-radius: 20px;
-  background-color: white;
-  color: #666;
-  font-size: 1rem;
   cursor: pointer;
+  font-size: 14px;
   transition: all 0.3s ease;
 }
 
-.toggle-button:hover {
-  background-color: #f5f5f5;
-}
-
+/* 활성화된 토글 버튼 스타일 */
 .toggle-button.active {
-  background-color: #007bff;
+  background-color: #8a2be2;
   color: white;
-  border-color: #007bff;
+  border-color: #8a2be2;
 }
 
+/* 토글 버튼 호버 효과 */
+.toggle-button:hover:not(.active) {
+  background-color: rgba(138, 43, 226, 0.3);
+}
+
+/* 메인 콘텐츠 영역 스타일 */
 .main-content {
   flex: 1;
-  padding: 2rem;
-} 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
