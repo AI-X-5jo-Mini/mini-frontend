@@ -31,14 +31,14 @@ function ImageUpload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 모드에 따른 유효성 검사
     if (mode === "single") {
-      // 1인 모드에서는 이미지 1개만 확인
       if (!image1) {
         alert("이미지를 업로드해주세요!");
         return;
       }
     } else {
-      // 2인 모드에서는 이미지 2개 모두 확인
+      // 두 이미지가 모두 업로드되었는지 확인
       if (!image1 || !image2) {
         alert("두 개의 이미지를 모두 업로드해주세요!");
         return;
@@ -47,43 +47,38 @@ function ImageUpload() {
 
     try {
       setLoading(true);
-      
-      // FormData 생성
-      const formData = new FormData();
-      formData.append("image1", image1);
-      formData.append("name1", name1);
-      
-      if (mode === "double") {
-        formData.append("image2", image2);
-        formData.append("name2", name2);
-      }
-      
-      formData.append("mode", mode);
-
-      let result;
-      if (mode === "single") {
-        // 1인 모드일 때는 AI 이미지를 사용
-        result = await analyzeApi(formData);
-      } else {
-        // 2인 모드일 때는 두 이미지 모두 사용
-        result = await analyzeApi(formData);
-      }
+      const result = await analyzeApi(
+        image1,
+        mode === "single" ? null : image2
+      );
       console.log("서버 응답:", result);
 
-      // 결과 페이지로 이동하면서 데이터 전달
+      // 서버에서 오류 응답이 왔는지 확인
+      if (result.error) {
+        alert(result.error);
+        return;
+      }
+
+      // 결과 페이지로 이동하면서 이미지와 이름 데이터를 전달
       navigate("/result", {
         state: {
           mode: mode,
           image1: preview1,
           image2: mode === "single" ? null : preview2,
           name1: name1,
-          name2: name2,
-          analysisResult: result,
+          name2: mode === "single" ? null : name2,
+          analysisResult: result
         },
       });
     } catch (error) {
       console.error("파일 업로드 중 오류 발생:", error);
-      alert("이미지 분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+
+      // 서버에서 반환된 오류 메시지가 있으면 그것을 표시
+      if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error);
+      } else {
+        alert("이미지 분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
     } finally {
       setLoading(false);
     }
@@ -101,9 +96,15 @@ function ImageUpload() {
       <br />
       <br />
       <div className="message-frame">
-        {mode === "single" 
-          ? "AI와 나의 궁합을 알아봅시다! 당신의 사진 한 장으로 시작해보세요 🤖"
-          : "친구! 가족! 사랑하는 사람들과의 궁합을 알아봅시다! 사진 두 장으로 시작해보세요 🤣"}
+        <div className="main-message">
+          ✨ Face Fate ✨ 얼굴에도 운명의 힌트가 있다?! 🔮😝
+          <br />
+          친구, 가족, 연인과의 관상 궁합을 가볍게 즐겨보세요!
+          <br/> 
+          사진 두장만 올리면, 재미있는 해석과 함께 궁합 결과를 알려드립니다! 💝
+          <br />
+          운명은 정해진 게 아니니까, 유쾌하게 확인해볼까요? 😜 ✨
+        </div>
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="upload-area">
@@ -171,7 +172,11 @@ function ImageUpload() {
         </div>
 
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? "분석 중..." : "궁합보기!"}
+          {loading
+            ? "분석 중..."
+            : mode === "single"
+            ? "관상보기!"
+            : "궁합보기!"}
         </button>
         <p className="notice-text">
           *걱정마세요! 사진은 절대로 저장되지 않습니다.
