@@ -6,7 +6,7 @@ import "../styles/resultPage.css";
 function ResultPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { image1, image2, name1, name2, analysisResult, error } =
+  const { image1, image2, name1, name2, analysisResult, error, mode } =
     location.state || {};
 
   // 오류 처리 및 이미지가 없으면 홈으로 리다이렉트
@@ -17,20 +17,20 @@ function ResultPage() {
       return;
     }
 
-    if (!image1 || !image2) {
+    if (!image1) {
       alert("이미지가 없습니다. 다시 시도해주세요.");
       navigate("/");
     }
 
-    if (!analysisResult || !analysisResult.compatibility_result) {
+    if (!analysisResult) {
       alert("분석 결과가 없습니다. 다시 시도해주세요.");
       navigate("/");
     }
-  }, [image1, image2, navigate, error, analysisResult]);
+  }, [image1, navigate, error, analysisResult]);
 
-  // 차트 초기화
+  // 차트 초기화 (dual 모드에서만)
   useEffect(() => {
-    if (image1 && image2) {
+    if (mode === "double" && image1 && image2) {
       const canvas = document.getElementById("myChart");
       if (!canvas) return;
 
@@ -110,109 +110,141 @@ function ResultPage() {
         }
       };
     }
-  }, [image1, image2, name1, name2, analysisResult]);
+  }, [image1, image2, name1, name2, analysisResult, mode]);
 
-  // API 응답에서 궁합 결과 가져오기
-  const person1Analysis = analysisResult?.compatibility_result?.person1_analysis
-    ? analysisResult.compatibility_result.person1_analysis
-        .replace(/첫 번째 사람의 관상:[ \t\n]*/i, "")
-        .replace(/첫 번째 사람 분석 내용:[ \t\n]*/i, "")
-        .trim()
-    : "";
-  const person2Analysis = analysisResult?.compatibility_result?.person2_analysis
-    ? analysisResult.compatibility_result.person2_analysis
-        .replace(/두 번째 사람의 관상:[ \t\n]*/i, "")
-        .replace(/두 번째 사람 분석 내용:[ \t\n]*/i, "")
-        .trim()
-    : "";
-  const compatibilityAnalysis = analysisResult?.compatibility_result
-    ?.compatibility_analysis
-    ? analysisResult.compatibility_result.compatibility_analysis
-        .replace(/두 사람의 궁합 분석 내용:[ \t\n]*/i, "")
-        .replace(/두 사람의 궁합 분석:[ \t\n]*/i, "")
-        .trim()
-    : "";
+  // API 응답에서 분석 결과 가져오기
+  // single 모드와 double 모드에서 응답 형식이 다름
+  let person1Analysis = "";
+  let person2Analysis = "";
+  let compatibilityAnalysis = "";
+
+  if (mode === "single") {
+    // single 모드에서는 analysisResult.analysis에 결과가 있음
+    person1Analysis = analysisResult?.analysis || "";
+  } else {
+    // double 모드에서는 compatibility_result 객체 안에 결과가 있음
+    person1Analysis = analysisResult?.compatibility_result?.person1_analysis
+      ? analysisResult.compatibility_result.person1_analysis
+          .replace(/첫 번째 사람의 관상:[ \t\n]*/i, "")
+          .replace(/첫 번째 사람 분석 내용:[ \t\n]*/i, "")
+          .trim()
+      : "";
+
+    person2Analysis = analysisResult?.compatibility_result?.person2_analysis
+      ? analysisResult.compatibility_result.person2_analysis
+          .replace(/두 번째 사람의 관상:[ \t\n]*/i, "")
+          .replace(/두 번째 사람 분석 내용:[ \t\n]*/i, "")
+          .trim()
+      : "";
+
+    compatibilityAnalysis = analysisResult?.compatibility_result
+      ?.compatibility_analysis
+      ? analysisResult.compatibility_result.compatibility_analysis
+          .replace(/두 사람의 궁합 분석 내용:[ \t\n]*/i, "")
+          .replace(/두 사람의 궁합 분석:[ \t\n]*/i, "")
+          .trim()
+      : "";
+  }
 
   // 디버깅을 위한 콘솔 로그 추가
-  console.log("원본 데이터:", analysisResult?.compatibility_result);
+  console.log("원본 데이터:", analysisResult);
   console.log("처리된 데이터:", {
     person1Analysis,
     person2Analysis,
     compatibilityAnalysis,
+    mode,
   });
 
   return (
     <div className="container simple-result-container">
-      <h1>궁합 결과</h1>
+      <h1>{mode === "single" ? "관상 결과" : "궁합 결과"}</h1>
 
       <div className="result-scroll-container">
-        <div className="simple-images">
-          <div className="simple-person">
-            <img src={image1} alt={name1} />
-            <p>{name1}</p>
+        {mode === "single" ? (
+          // 싱글 모드 결과 표시
+          <div className="single-result">
+            <div className="simple-person">
+              <img src={image1} alt={name1} className="single-image" />
+              <p>{name1}</p>
+            </div>
+
+            <div className="analysis-card single-analysis">
+              <h3>{name1}의 관상 분석</h3>
+              <p>{person1Analysis}</p>
+            </div>
           </div>
+        ) : (
+          // 듀얼 모드 결과 표시
+          <>
+            <div className="simple-images">
+              <div className="simple-person">
+                <img src={image1} alt={name1} />
+                <p>{name1}</p>
+              </div>
 
-          <div className="simple-result">
-            <h2>
-              {compatibilityAnalysis.includes("총점")
-                ? (() => {
-                    const score = parseInt(
-                      compatibilityAnalysis
-                        .split("총점은")[1]
-                        .split("점")[0]
-                        .trim()
-                    );
+              <div className="simple-result">
+                <h2>
+                  {compatibilityAnalysis.includes("총점")
+                    ? (() => {
+                        const score = parseInt(
+                          compatibilityAnalysis
+                            .split("총점은")[1]
+                            .split("점")[0]
+                            .trim()
+                        );
 
-                    let evaluation;
-                    switch (true) {
-                      case score >= 90:
-                        evaluation = "매우 좋음";
-                        break;
-                      case score >= 80:
-                        evaluation = "좋음";
-                        break;
-                      case score >= 70:
-                        evaluation = "중간";
-                        break;
-                      case score >= 60:
-                        evaluation = "나쁨";
-                        break;
-                      default:
-                        evaluation = "아주 나쁨";
-                    }
+                        let evaluation;
+                        switch (true) {
+                          case score >= 90:
+                            evaluation = "매우 좋음";
+                            break;
+                          case score >= 80:
+                            evaluation = "좋음";
+                            break;
+                          case score >= 70:
+                            evaluation = "중간";
+                            break;
+                          case score >= 60:
+                            evaluation = "나쁨";
+                            break;
+                          default:
+                            evaluation = "아주 나쁨";
+                        }
 
-                    return score + "점 (" + evaluation + ")";
-                  })()
-                : "매우 좋음"}
-            </h2>
-          </div>
+                        return score + "점 (" + evaluation + ")";
+                      })()
+                    : "매우 좋음"}
+                </h2>
+              </div>
 
-          <div className="simple-person">
-            <img src={image2} alt={name2} />
-            <p>{name2}</p>
-          </div>
-        </div>
+              <div className="simple-person">
+                <img src={image2} alt={name2} />
+                <p>{name2}</p>
+              </div>
+            </div>
 
-        <div className="simple-chart">
-          <canvas id="myChart"></canvas>
-        </div>
+            <div className="simple-chart">
+              <canvas id="myChart"></canvas>
+            </div>
 
-        <div className="analysis-container">
-          <div className="analysis-card">
-            <h3>{name1} 분석</h3>
-            <p>{person1Analysis}</p>
-          </div>
+            <div className="analysis-container">
+              <div className="analysis-card">
+                <h3>{name1} 분석</h3>
+                <p>{person1Analysis}</p>
+              </div>
 
-          <div className="analysis-card">
-            <h3>{name2} 분석</h3>
-            <p>{person2Analysis}</p>
-          </div>
+              <div className="analysis-card">
+                <h3>{name2} 분석</h3>
+                <p>{person2Analysis}</p>
+              </div>
 
-          <div className="analysis-card compatibility">
-            <h3>궁합 분석</h3>
-            <p>{compatibilityAnalysis}</p>
-          </div>
-        </div>
+              <div className="analysis-card compatibility">
+                <h3>궁합 분석</h3>
+                <p>{compatibilityAnalysis}</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <button className="restart-button" onClick={() => navigate("/")}>

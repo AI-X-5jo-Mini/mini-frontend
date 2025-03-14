@@ -1,11 +1,12 @@
 // src/components/ImageUpload.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import "../styles/imageUpload.css";
 import { analyzeApi } from "../api/analyzeApi";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function ImageUpload() {
+  const { mode } = useOutletContext();
   const [preview1, setPreview1] = useState("");
   const [preview2, setPreview2] = useState("");
   const [image1, setImage1] = useState("");
@@ -30,15 +31,26 @@ function ImageUpload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 두 이미지가 모두 업로드되었는지 확인
-    if (!image1 || !image2) {
-      alert("두 개의 이미지를 모두 업로드해주세요!");
-      return;
+    // 모드에 따른 유효성 검사
+    if (mode === "single") {
+      if (!image1) {
+        alert("이미지를 업로드해주세요!");
+        return;
+      }
+    } else {
+      // 두 이미지가 모두 업로드되었는지 확인
+      if (!image1 || !image2) {
+        alert("두 개의 이미지를 모두 업로드해주세요!");
+        return;
+      }
     }
 
     try {
       setLoading(true);
-      const result = await analyzeApi(image1, image2);
+      const result = await analyzeApi(
+        image1,
+        mode === "single" ? null : image2
+      );
       console.log("서버 응답:", result);
 
       // 서버에서 오류 응답이 왔는지 확인
@@ -51,10 +63,11 @@ function ImageUpload() {
       navigate("/result", {
         state: {
           image1: preview1,
-          image2: preview2,
+          image2: mode === "single" ? null : preview2,
           name1: name1,
-          name2: name2,
-          analysisResult: result, // 분석 결과도 함께 전달
+          name2: mode === "single" ? null : name2,
+          analysisResult: result,
+          mode: mode,
         },
       });
     } catch (error) {
@@ -105,39 +118,45 @@ function ImageUpload() {
             />
           </div>
 
-          <div className="upload-item">
-            <label className="upload-box">
-              {preview2 ? (
-                <img
-                  src={preview2}
-                  alt="미리보기 2"
-                  className="preview-image"
+          {mode === "double" && (
+            <div className="upload-item">
+              <label className="upload-box">
+                {preview2 ? (
+                  <img
+                    src={preview2}
+                    alt="미리보기 2"
+                    className="preview-image"
+                  />
+                ) : (
+                  <div className="upload-placeholder">
+                    <i className="upload-icon">📷</i>
+                    <p>상대방 사진을 넣어주세요</p>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={(e) => handleImageChange(e, setPreview2, setImage2)}
+                  className="file-input"
                 />
-              ) : (
-                <div className="upload-placeholder">
-                  <i className="upload-icon">📷</i>
-                  <p>상대방 사진을 넣어주세요</p>
-                </div>
-              )}
+              </label>
               <input
-                type="file"
-                onChange={(e) => handleImageChange(e, setPreview2, setImage2)}
-                className="file-input"
+                type="text"
+                className="name-input"
+                name="name2"
+                value={name2}
+                onChange={(e) => setName2(e.target.value)}
+                placeholder="이름 입력"
               />
-            </label>
-            <input
-              type="text"
-              className="name-input"
-              name="name2"
-              value={name2}
-              onChange={(e) => setName2(e.target.value)}
-              placeholder="이름 입력"
-            />
-          </div>
+            </div>
+          )}
         </div>
 
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? "분석 중..." : "궁합보기!"}
+          {loading
+            ? "분석 중..."
+            : mode === "single"
+            ? "관상보기!"
+            : "궁합보기!"}
         </button>
         <p className="notice-text">
           *걱정마세요! 사진은 절대로 저장되지 않습니다.
@@ -147,7 +166,6 @@ function ImageUpload() {
       {loading && (
         <div className="loading-overlay">
           <CircularProgress size={60} />
-
           <p>이미지 분석 중입니다...</p>
         </div>
       )}
