@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-// import "../styles/layout.css";
+import "../styles/layout.css";
 
 const Layout = () => {
   const [mode, setMode] = useState("single"); // "single" or "double"
@@ -20,13 +20,13 @@ const Layout = () => {
             className={`toggle-button ${mode === "single" ? "active" : ""}`}
             onClick={() => handleModeChange("single")}
           >
-            1인 모드
+            나의 관상
           </button>
           <button
             className={`toggle-button ${mode === "double" ? "active" : ""}`}
             onClick={() => handleModeChange("double")}
           >
-            2인 모드
+            궁합 보기
           </button>
         </div>
       </nav>
