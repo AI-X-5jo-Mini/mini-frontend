@@ -6,14 +6,27 @@ import "../styles/resultPage.css";
 function ResultPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { image1, image2, name1, name2, analysisResult } = location.state || {};
+  const { image1, image2, name1, name2, analysisResult, error } =
+    location.state || {};
 
-  // 이미지가 없으면 홈으로 리다이렉트
+  // 오류 처리 및 이미지가 없으면 홈으로 리다이렉트
   useEffect(() => {
+    if (error) {
+      alert(`오류가 발생했습니다: ${error}`);
+      navigate("/");
+      return;
+    }
+
     if (!image1 || !image2) {
+      alert("이미지가 없습니다. 다시 시도해주세요.");
       navigate("/");
     }
-  }, [image1, image2, navigate]);
+
+    if (!analysisResult || !analysisResult.compatibility_result) {
+      alert("분석 결과가 없습니다. 다시 시도해주세요.");
+      navigate("/");
+    }
+  }, [image1, image2, navigate, error, analysisResult]);
 
   // 차트 초기화
   useEffect(() => {

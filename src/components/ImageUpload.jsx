@@ -41,6 +41,12 @@ function ImageUpload() {
       const result = await analyzeApi(image1, image2);
       console.log("서버 응답:", result);
 
+      // 서버에서 오류 응답이 왔는지 확인
+      if (result.error) {
+        alert(result.error);
+        return;
+      }
+
       // 결과 페이지로 이동하면서 이미지와 이름 데이터를 전달
       navigate("/result", {
         state: {
@@ -53,7 +59,13 @@ function ImageUpload() {
       });
     } catch (error) {
       console.error("파일 업로드 중 오류 발생:", error);
-      alert("이미지 분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+
+      // 서버에서 반환된 오류 메시지가 있으면 그것을 표시
+      if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error);
+      } else {
+        alert("이미지 분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
     } finally {
       setLoading(false);
     }
