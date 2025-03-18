@@ -8,21 +8,22 @@
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/62ffa61b-ccad-4b44-8615-3037dbc1877d" width="400">
-  <p>Facte은 AI 기반 얼굴 분석을 활용한 개인 관상 및 궁합 진단 서비스입니다</p>
+  <h3>😇 Facte은 AI 기반 얼굴 분석을 활용한 개인 관상 및 궁합 진단 서비스입니다 </h3>
 </div>
+<br>
 
 ---
 
 
-# 시연영상
+# 📽️ 시연영상
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/7cbd1eab-ac3c-492b-857a-7a23debbc544" width="500" style="display:inline-block;">
-  <img src="https://github.com/user-attachments/assets/c9d47a2b-e4d2-4bbf-bf18-5bf5bc97ed48" width="500" style="display:inline-block;">
-</div>
+| 🦰 관상 모드 | 🧑‍🦱 궁합 모드 |
+|----------|----------|
+| ![관상 모드](https://github.com/user-attachments/assets/7cbd1eab-ac3c-492b-857a-7a23debbc544) | ![궁합 모드](https://github.com/user-attachments/assets/c9d47a2b-e4d2-4bbf-bf18-5bf5bc97ed48) |
+
 
 ---
-# 팀원
+# 👐 팀원
 | 이름   | 역할 및 업무 |
 |--------|------------------------------------------------|
 | **김지환** | 팀장, 최적 모델 조사 / 테스트, 목업 제작, 프로젝트 문서화 |
