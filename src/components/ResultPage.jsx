@@ -222,11 +222,6 @@ function ResultPage() {
                 <p>{name2}</p>
               </div>
             </div>
-
-            <div className="simple-chart">
-              <canvas id="myChart"></canvas>
-            </div>
-
             <div className="analysis-container">
               <div className="analysis-card">
                 <h3>{name1} 분석</h3>
@@ -247,11 +242,14 @@ function ResultPage() {
         )}
       </div>
 
+      <div className="simple-chart">
+        <canvas id="myChart"></canvas>
+      </div>
+
       <button className="restart-button" onClick={() => navigate("/")}>
         다시하기
       </button>
     </div>
   );
 }
-
 export default ResultPage;

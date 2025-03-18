@@ -4,11 +4,13 @@
   padding: 2rem;
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .result-title {
   text-align: center;
-  margin-bottom: 2rem;
   font-size: 2.2rem;
   font-weight: 700;
   color: #333;
@@ -20,14 +22,16 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   padding: 2rem;
-  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .image-comparison {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  gap: 1rem;
 }
 
 .person-card {
@@ -267,6 +271,7 @@ button:hover {
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
+  max-width: 900px;
 }
 
 .analysis-card:hover {
@@ -290,8 +295,11 @@ button:hover {
 }
 
 .analysis-card.compatibility {
-  background-color: #f8f9ff;
-  border-left: 4px solid #4b8bf4;
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
 }
 
 .restart-button {
